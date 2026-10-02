@@ -214,11 +214,113 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 #birds.back .fm{transform:scaleX(-1)}
 @media (prefers-reduced-motion:reduce){#birds{display:none}}
 
-/* Adaptive visual quality: decorative effects are softened only after sustained frame pressure. */
-html.adaptive-low #stars i{animation-duration:5s!important;box-shadow:none}
-html.adaptive-low #planet,.adaptive-low .pfeat{animation-duration:12s!important}
-html.adaptive-low #birds{opacity:.65}
-html.adaptive-low .cn circle{animation:none}
+/* Missions archive — intentionally scoped to #missions only */
+#missions{padding-top:13vh;padding-bottom:20vh;align-items:flex-start}
+#missions .missions-shell{width:100%;max-width:1180px}
+#missions .missions-head{display:flex;align-items:end;justify-content:space-between;gap:50px;margin-bottom:34px;padding:0 4px}
+#missions .missions-head .lead{max-width:480px;margin:0;color:rgba(255,244,224,.76);font-size:15px}
+#missions .eyebrow{font-size:11px;letter-spacing:.18em;color:var(--c, #35d0ba);font-weight:800;margin-bottom:10px;opacity:.9}
+#missions .missions-head h2{margin:0;font-size:clamp(36px,5vw,62px);line-height:.95;text-shadow:0 4px 24px rgba(8,10,45,.45)}
+#missions .mission-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#missions .mission-card{position:relative;display:grid;grid-template-columns:42% 58%;min-height:300px;overflow:hidden;border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 60%),rgba(18,22,66,.46);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 18px 48px rgba(8,10,45,.22);transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
+#missions .mission-card:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--c) 55%,white 15%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 26px 65px rgba(8,10,45,.3)}
+#missions .mission-card.featured{grid-column:1 / -1;grid-template-columns:54% 46%;min-height:390px}
+#missions .mission-media{position:relative;min-height:100%;overflow:hidden;background:radial-gradient(circle at 55% 42%,color-mix(in srgb,var(--c) 28%,transparent),transparent 42%),linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.015));border-right:1px solid rgba(255,255,255,.13)}
+#missions .mission-media:before{content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(transparent 49%,rgba(255,255,255,.06) 50%,transparent 51%),linear-gradient(90deg,transparent 49%,rgba(255,255,255,.05) 50%,transparent 51%);background-size:100% 32px,32px 100%;opacity:.42}
+#missions .mission-media:after{content:"";position:absolute;width:130px;height:130px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 0 70px color-mix(in srgb,var(--c) 20%,transparent),inset 0 0 35px color-mix(in srgb,var(--c) 10%,transparent)}
+#missions .media-label{position:absolute;z-index:2;left:18px;top:17px;font-size:10px;letter-spacing:.14em;font-weight:800;color:rgba(255,244,224,.65)}
+#missions .media-mark{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font-size:10px;line-height:1.5;letter-spacing:.22em;color:rgba(255,244,224,.5);white-space:nowrap}
+#missions .media-play{position:absolute;z-index:3;right:18px;bottom:17px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);font-size:11px;color:var(--cream);transition:transform .3s,background .3s}
+#missions .mission-card:hover .media-play{transform:scale(1.08);background:color-mix(in srgb,var(--c) 35%,rgba(255,255,255,.12))}
+#missions .mission-copy{padding:25px 27px 23px;display:flex;flex-direction:column;align-items:flex-start}
+#missions .mission-meta{display:flex;align-items:center;gap:9px;margin-bottom:14px;color:rgba(255,244,224,.55)}
+#missions .mission-meta>span{font-size:12px;font-weight:800;color:var(--c)}
+#missions .mission-meta i{width:24px;height:1px;background:rgba(255,255,255,.25)}
+#missions .mission-meta small{font-size:9px;letter-spacing:.14em;font-weight:800}
+#missions .mission-copy h3{font-size:clamp(21px,2.1vw,29px);line-height:1.02;margin:0 0 10px;letter-spacing:-.025em}
+#missions .mission-copy p{font-size:14px;line-height:1.55;color:rgba(255,244,224,.68);margin:0 0 15px}
+#missions .mission-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:10px}
+#missions .mission-tags span{padding:5px 9px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);font-size:10px;color:rgba(255,244,224,.78)}
+#missions .mission-expand{margin-top:17px;padding:0;background:transparent;color:rgba(255,244,224,.72);font-size:10px;letter-spacing:.12em;font-weight:800;display:flex;align-items:center;gap:9px;border-radius:0}
+#missions .mission-expand b{font-size:15px;color:var(--c);transition:transform .3s}
+#missions .mission-card:hover .mission-expand b{transform:translate(3px,-3px)}
+#missions .missions-foot{display:flex;align-items:center;gap:13px;margin-top:20px;padding:0 5px;color:rgba(255,244,224,.38);font-size:9px;letter-spacing:.16em;font-weight:800}
+#missions .missions-foot i{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.18),transparent)}
+@media(max-width:820px){#missions .missions-head{display:block;margin-bottom:25px}#missions .missions-head .lead{margin-top:14px}#missions .mission-grid{grid-template-columns:1fr}#missions .mission-card,#missions .mission-card.featured{grid-column:auto;grid-template-columns:40% 60%;min-height:280px}}
+@media(max-width:560px){#missions{padding-top:10vh}#missions .mission-card,#missions .mission-card.featured{grid-template-columns:1fr;min-height:0}#missions .mission-media{height:210px;min-height:210px;border-right:0;border-bottom:1px solid rgba(255,255,255,.13)}#missions .mission-copy{padding:21px}#missions .mission-copy h3{font-size:24px}#missions .missions-foot{font-size:8px}}
+
+/* Missions layout 2 — only affects the Missions section */
+.mission-showcase{width:100%;max-width:1120px;text-shadow:0 2px 14px rgba(8,10,45,.8),0 0 3px rgba(8,10,45,.45)}
+.ms-head{display:flex;align-items:flex-end;justify-content:space-between;gap:50px;margin-bottom:52px}
+.ms-head h2{margin-bottom:0}
+.ms-head .lead{max-width:390px;margin:0;font-size:15px}
+.ms-kicker{font-size:11px;letter-spacing:.16em;color:var(--sun);font-weight:700;margin-bottom:9px}
+.ms-list{display:flex;flex-direction:column;gap:70px}
+.ms-project{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);align-items:center;gap:clamp(30px,6vw,90px);position:relative}
+.ms-project.reverse{grid-template-columns:minmax(300px,.85fr) minmax(0,1.15fr)}
+.ms-project.reverse .ms-media{order:2}.ms-project.reverse .ms-info{order:1}
+.ms-media{height:clamp(240px,30vw,360px);border:1px solid rgba(255,255,255,.25);border-radius:28px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.035)),rgba(18,22,66,.55);backdrop-filter:blur(20px) saturate(150%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 20px 50px rgba(10,12,50,.25);display:flex;align-items:center;justify-content:center}
+.ms-media:before{content:"";position:absolute;inset:14px;border:1px dashed color-mix(in srgb,var(--c) 45%,transparent);border-radius:20px;opacity:.65}
+.ms-media:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 24%,transparent),transparent 68%);filter:blur(4px)}
+.ms-media span{position:absolute;left:22px;top:18px;font-size:clamp(42px,6vw,74px);font-weight:800;color:rgba(255,244,224,.12);letter-spacing:-.06em;z-index:2}
+.ms-media b{position:absolute;left:24px;bottom:20px;font-size:10px;letter-spacing:.15em;color:rgba(255,244,224,.68);z-index:2}
+.ms-media i{width:58px;height:58px;border-radius:50%;border:1px solid rgba(255,255,255,.38);display:grid;place-items:center;font-style:normal;font-size:17px;color:var(--c);background:rgba(10,12,50,.28);box-shadow:0 0 30px color-mix(in srgb,var(--c) 20%,transparent);z-index:2;transition:transform .3s,background .3s}
+.ms-project:hover .ms-media i{transform:scale(1.12);background:rgba(255,255,255,.08)}
+.ms-info{position:relative;padding:8px 0}
+.ms-index{display:flex;align-items:center;gap:10px;color:var(--c);font-size:13px;font-weight:800;letter-spacing:.05em;margin-bottom:15px}
+.ms-index:after{content:"";height:1px;width:38px;background:var(--c);opacity:.6}
+.ms-index em{font-style:normal;color:rgba(255,244,224,.52);font-size:10px;letter-spacing:.14em;font-weight:600}
+.ms-info h3{font-size:clamp(32px,4.4vw,56px);line-height:.94;letter-spacing:-.035em;margin:0 0 18px;color:var(--cream)}
+.ms-info p{font-size:15px;line-height:1.6;max-width:470px;color:rgba(255,244,224,.78);margin-bottom:18px}
+.ms-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}.ms-tags small{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);border-radius:99px;padding:6px 11px;color:rgba(255,244,224,.82);font-size:11px}
+.ms-open{display:inline-flex;align-items:center;gap:9px;color:var(--cream);font-size:11px;font-weight:800;letter-spacing:.12em;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:6px}.ms-open strong{color:var(--c);font-size:15px;transition:transform .25s}.ms-open:hover strong{transform:translate(3px,-3px)}
+.ms-more{display:flex;align-items:center;gap:18px;margin-top:70px;font-size:10px;letter-spacing:.15em;color:rgba(255,244,224,.55)}.ms-more i{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.3),transparent)}
+@media(max-width:760px){.ms-head{display:block;margin-bottom:34px}.ms-head .lead{margin-top:15px}.ms-list{gap:54px}.ms-project,.ms-project.reverse{display:flex;flex-direction:column;align-items:stretch;gap:24px}.ms-project.reverse .ms-media,.ms-project.reverse .ms-info{order:initial}.ms-media{height:260px}.ms-info h3{font-size:38px}.ms-more{margin-top:48px;gap:10px}.ms-more span:last-child{display:none}}
+@media(prefers-reduced-motion:reduce){.ms-media i,.ms-open strong{transition:none}}
+
+/* Mission project detail overlay — scoped to Missions */
+#mission-detail{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}
+#mission-detail.open{opacity:1;visibility:visible;pointer-events:auto}
+#mission-detail .md-backdrop{position:absolute;inset:0;background:rgba(5,6,26,.72);backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%)}
+#mission-detail .md-panel{position:relative;width:min(1120px,100%);max-height:min(92vh,920px);overflow:auto;border:1px solid rgba(255,255,255,.25);border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.045)),rgba(18,22,66,.88);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 35px 100px rgba(0,0,0,.45);-webkit-backdrop-filter:blur(30px) saturate(160%);backdrop-filter:blur(30px) saturate(160%);transform:translateY(22px) scale(.98);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+#mission-detail.open .md-panel{transform:none}
+#mission-detail .md-top{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.12);position:sticky;top:0;z-index:5;background:rgba(18,22,66,.72);backdrop-filter:blur(18px)}
+#mission-detail .md-count{font-size:10px;letter-spacing:.16em;font-weight:800;color:rgba(255,244,224,.58)}
+#mission-detail .md-close{width:38px;height:38px;border-radius:50%;padding:0;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:var(--cream);font-size:18px}
+#mission-detail .md-content{padding:clamp(24px,4vw,48px)}
+#mission-detail .md-kicker{font-size:10px;letter-spacing:.18em;font-weight:800;color:var(--md-c,var(--sun));margin-bottom:10px}
+#mission-detail h2{font-size:clamp(38px,6vw,76px);line-height:.9;max-width:850px;margin-bottom:14px}
+#mission-detail .md-sub{font-size:13px;letter-spacing:.08em;color:rgba(255,244,224,.55);margin-bottom:28px}
+#mission-detail .md-media{height:min(48vh,470px);min-height:260px;border:1px solid rgba(255,255,255,.18);border-radius:24px;position:relative;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--md-c) 22%,transparent),transparent 48%),linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025))}
+#mission-detail .md-media:before{content:"";position:absolute;inset:16px;border:1px dashed color-mix(in srgb,var(--md-c) 40%,transparent);border-radius:18px;background:linear-gradient(transparent 49%,rgba(255,255,255,.045) 50%,transparent 51%),linear-gradient(90deg,transparent 49%,rgba(255,255,255,.035) 50%,transparent 51%);background-size:100% 34px,34px 100%;opacity:.55}
+#mission-detail .md-play{position:relative;z-index:2;width:74px;height:74px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.3);background:rgba(10,12,50,.35);color:var(--md-c);font-size:22px;box-shadow:0 0 45px color-mix(in srgb,var(--md-c) 18%,transparent)}
+#mission-detail .md-media-label{position:absolute;left:22px;top:19px;z-index:2;font-size:9px;letter-spacing:.16em;color:rgba(255,244,224,.52);font-weight:800}
+#mission-detail .md-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.6fr);gap:34px;margin-top:32px}
+#mission-detail .md-section-label{font-size:10px;letter-spacing:.16em;color:var(--md-c);font-weight:800;margin-bottom:10px}
+#mission-detail .md-description{font-size:16px;line-height:1.7;color:rgba(255,244,224,.82);max-width:700px}
+#mission-detail .md-contrib{margin:10px 0 0;padding-left:20px;color:rgba(255,244,224,.78);font-size:14px;line-height:1.65}#mission-detail .md-contrib li{margin-bottom:8px;padding-left:3px}
+#mission-detail .md-tags{display:flex;gap:7px;flex-wrap:wrap}.md-tags span{padding:7px 11px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);font-size:11px;color:rgba(255,244,224,.78)}
+#mission-detail .md-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px}
+#mission-detail .md-photo{height:120px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.025));display:grid;place-items:center;color:rgba(255,244,224,.35);font-size:9px;letter-spacing:.12em}
+#mission-detail .md-nav{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+#mission-detail .md-nav button{background:transparent;color:rgba(255,244,224,.72);border:1px solid rgba(255,255,255,.17);padding:11px 15px;font-size:10px;letter-spacing:.1em}
+#mission-detail .md-nav button:hover{background:rgba(255,255,255,.07);filter:none}
+@media(max-width:700px){#mission-detail{padding:10px}#mission-detail .md-panel{max-height:96vh;border-radius:24px}#mission-detail .md-body{grid-template-columns:1fr;gap:24px}#mission-detail .md-gallery{grid-template-columns:1fr 1fr}#mission-detail .md-photo{height:100px}}
+@media(prefers-reduced-motion:reduce){#mission-detail,#mission-detail .md-panel{transition:none}}
+
+ 
+/* Adaptive performance tiers. High-refresh displays keep the full visual layer;
+   lower tiers only trim decorative work when sustained frame time rises. */
+@media (min-width:1px){
+ .perf-low #stars i:nth-of-type(3n){display:none}
+ .perf-low #stars i{animation-duration:6s}
+ .perf-low #world{will-change:auto}
+ .perf-low .md-backdrop{backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important}
+ .perf-low .glass,.perf-low .bt,.perf-low .ms-media,.perf-low .mission-card{backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
+}
+@media (prefers-reduced-motion:reduce){
+ .perf-high #stars i,.perf-low #stars i{animation:none}
+}
 </style>
 </head>
 <body>
@@ -262,19 +364,22 @@ html.adaptive-low .cn circle{animation:none}
   <div class="row"><button id="go">Start the ride</button><a class="btn o" href="#numbers">Skip to the proof</a></div>
  </div></section>
 
- <section class="stop" id="missions" data-n="Missions"><div class="card glass rv" style="max-width:620px">
-  <h2>Six missions from the field</h2>
-  <p class="lead">Unity and XR work for defence and enterprise teams, where a bad training session is expensive.</p>
-  <div class="list">
-   <div class="m" style="--c:#ff7a59"><h3>Drive a robot you can't touch</h3><p>A virtual twin of the Predator MDX ground vehicle, wired to real ground-control software so operators practise before the hardware ever moves.</p><span class="chip">UGV Simulator</span><span class="chip">Unity</span></div>
-   <div class="m" style="--c:#35d0ba"><h3>Carry a control room in a headset</h3><p>Live Quest 3 passthrough streamed to a command centre for HAL, with frontend and backend built to keep up.</p><span class="chip">Command Center</span><span class="chip">WebSocket</span></div>
-   <div class="m" style="--c:#a596ff"><h3>Talk to the room</h3><p>An animated assistant that lives in mixed reality and answers voice or text, running AI models locally for the Navy.</p><span class="chip">iDeX</span><span class="chip">Local AI</span></div>
-   <div class="m" style="--c:#ffc93c"><h3>Take it apart, then put it back</h3><p>Tank T-90 and INSAS rifle trainers with exploded views, guided assembly and data captured on every step.</p><span class="chip">Custom interactions</span></div>
-   <div class="m" style="--c:#ff9ec2"><h3>Weld and paint without the sparks</h3><p>Complete OpenXR labs: tools, guided workflows, scoring and the physical room setup, delivered end to end.</p><span class="chip">OpenXR</span><span class="chip">Lab delivery</span></div>
-   <div class="m" style="--c:#7bd4ff"><h3>Hands only, no controllers</h3><p>Maintenance training for ULSB MK II and ALS driven by custom hand tracking.</p><span class="chip">Meta XR SDK</span><span class="chip">Hand tracking</span></div>
+ <section class="stop c" id="missions" data-n="Missions"><div class="mission-showcase rv">
+  <div class="ms-head"><div><div class="ms-kicker">FIELD ARCHIVE · PROJECTS</div><h2>Things I've built in the field</h2></div><p class="lead">XR training systems, industrial tools, remote assistance platforms, and games — built for real users and real-world constraints.</p></div>
+  <div class="ms-list">
+   <article class="ms-project" style="--c:#ff7a59"><div class="ms-media"><span>01</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">01 <em>ALS TRUCK MAINTENANCE</em></div><h3>Learn maintenance<br>without the truck</h3><p>VR-based ALS Truck Maintenance Training Simulator for Army personnel, with guided and independent assembly, disassembly, time trials, scoring, and performance feedback.</p><div class="ms-tags"><small>Unity</small><small>Meta XR SDK</small><small>VR Training</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project reverse" style="--c:#ff9ec2"><div class="ms-media"><span>02</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">02 <em>BOLLYWOOD AWARD RUSH</em></div><h3>Run through<br>Bollywood</h3><p>Isometric Android endless runner with Bollywood-inspired characters, obstacle dodging, coin collection, progression, and progressively increasing difficulty.</p><div class="ms-tags"><small>Unity</small><small>C#</small><small>Android</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project" style="--c:#35d0ba"><div class="ms-media"><span>03</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">03 <em>COMMAND CENTER</em></div><h3>Carry a control room<br>in a headset</h3><p>VR and web-based remote assistance platform for HAL with Quest 3/3S passthrough video, two-way audio, live chat, session management, and network analytics.</p><div class="ms-tags"><small>Unity</small><small>Node.js</small><small>WebSocket</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project reverse" style="--c:#7bd4ff"><div class="ms-media"><span>04</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">04 <em>INFINITE FLIGHT</em></div><h3>Fly through<br>the neon city</h3><p>First-person Android endless flying game built around smooth floating movement, physics-based controls, procedural obstacles, survival scoring, and increasing difficulty.</p><div class="ms-tags"><small>Unity</small><small>C#</small><small>Android</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project" style="--c:#a596ff"><div class="ms-media"><span>05</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">05 <em>NAVIKA AI · IDEX NAVY</em></div><h3>Talk to<br>the room</h3><p>Mixed Reality AI assistant for ship troubleshooting, combining live scene capture, local AI inference, 3D guidance, contextual overlays, voice communication, and chat.</p><div class="ms-tags"><small>Unity</small><small>Mixed Reality</small><small>Local AI</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project reverse" style="--c:#ffc93c"><div class="ms-media"><span>06</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">06 <em>PAINTING SIMULATOR</em></div><h3>Paint without<br>the waste</h3><p>VR industrial painting trainer with Zebra Board exercises, HVLP and Airless guns, real-time evaluation, physical spray-gun integration, and centralized training data.</p><div class="ms-tags"><small>OpenXR</small><small>Arduino</small><small>HLSL</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project" style="--c:#ff7a59"><div class="ms-media"><span>07</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">07 <em>SUPER HERO CUBE</em></div><h3>Endless running<br>with super cubes</h3><p>Fast-paced 3D Android endless runner with physics-based movement, superhero characters, obstacles, coins, progression, and performance optimization.</p><div class="ms-tags"><small>Unity</small><small>C#</small><small>Android</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project reverse" style="--c:#ffc93c"><div class="ms-media"><span>08</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">08 <em>TANK T-90 MAINTENANCE</em></div><h3>Maintain a tank<br>in virtual space</h3><p>VR maintenance training simulator covering inspection, maintenance, fault diagnosis, guided assembly and disassembly, time trials, and performance evaluation.</p><div class="ms-tags"><small>Unity</small><small>Meta XR SDK</small><small>Hand Interaction</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project" style="--c:#35d0ba"><div class="ms-media"><span>09</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">09 <em>ULSB MK III TRAINING</em></div><h3>Deploy it<br>the right way</h3><p>VR training module for the ULSB MK III Military Communication System, covering component identification, cable routing, field setup, operational workflows, and procedural validation.</p><div class="ms-tags"><small>Unity</small><small>Meta XR SDK</small><small>Hand Tracking</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
+   <article class="ms-project reverse" style="--c:#ff9ec2"><div class="ms-media"><span>10</span><b>VIDEO / PHOTOS</b><i>▶</i></div><div class="ms-info"><div class="ms-index">10 <em>WELDING SIMULATOR</em></div><h3>Weld without<br>the sparks</h3><p>VR welding training simulator with MIG, TIG and ARC processes, realistic welding effects, guided workflows, scoring, assessment, and centralized trainee data.</p><div class="ms-tags"><small>OpenXR</small><small>Unity</small><small>VR Training</small></div><a href="#" class="ms-open">VIEW PROJECT <strong>↗</strong></a></div></article>
   </div>
+  <div class="ms-more"><span>10 PROJECTS SHOWN</span><i></i><span>MORE PROJECTS COMING</span></div>
  </div></section>
-
  <section class="stop r" id="numbers" data-n="By the numbers"><div class="bw rv">
  <h2>What changed after I shipped</h2>
  <div class="bento">
@@ -310,31 +415,64 @@ html.adaptive-low .cn circle{animation:none}
  </div></section>
 </main>
 
+<div id="mission-detail" aria-hidden="true">
+ <div class="md-backdrop"></div>
+ <div class="md-panel" role="dialog" aria-modal="true" aria-labelledby="md-title">
+  <div class="md-top"><span class="md-count" id="md-count">01 / 06</span><button class="md-close" id="md-close" aria-label="Close project">×</button></div>
+  <div class="md-content" id="md-content"></div>
+ </div>
+</div>
+
 <script>
 (function(){
  document.documentElement.classList.add('js');
  var $=function(i){return document.getElementById(i)};
-
- /* Adaptive rendering: capable displays render at their native refresh rate;
-    sustained frame drops automatically reduce decorative GPU work. */
- var adaptive={low:false,last:0,samples:[],good:0,bad:0,
-  setLow:function(v){if(this.low===v)return;this.low=v;document.documentElement.classList.toggle('adaptive-low',v);},
-  sample:function(now){
-   if(this.last){var dt=now-this.last;if(dt>0&&dt<100)this.samples.push(dt);
-    if(this.samples.length>=45){var sum=0;for(var i=0;i<this.samples.length;i++)sum+=this.samples[i];var avg=sum/this.samples.length;
-     if(avg>20){this.bad++;this.good=0}else if(avg<14){this.good++;this.bad=0}else{this.good=0;this.bad=0}
-     if(this.bad>=3)this.setLow(true);if(this.good>=6)this.setLow(false);this.samples.length=0;
-    }
-   }
-   this.last=now;if(!document.hidden)requestAnimationFrame(this.sample.bind(this));
-  },
-  start:function(){document.addEventListener('visibilitychange',function(){adaptive.last=0;adaptive.samples=[];if(!document.hidden)requestAnimationFrame(adaptive.sample.bind(adaptive))});requestAnimationFrame(this.sample.bind(this));}
- };
- adaptive.start();
  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
  function rnd(s){return function(){s=(s*16807)%2147483647;return s/2147483647}}
  function cl(v,a,b){return Math.min(b,Math.max(a,v))}
  var W=4200,lastY=scrollY,lastW=0;
+
+ // Adaptive rendering: follow the display's native refresh cadence and
+ // automatically reduce decorative work when the browser is under load.
+ var frameQueued=false,lastFrame=performance.now(),frameSamples=[],perfLevel='normal';
+ var pendingScroll=true,pendingResize=true;
+ function setPerfLevel(level){
+  if(level===perfLevel)return;
+  perfLevel=level;
+  document.documentElement.classList.toggle('perf-high',level==='high');
+  document.documentElement.classList.toggle('perf-low',level==='low');
+ }
+ function measureFrame(now){
+  var dt=now-lastFrame;lastFrame=now;
+  if(dt>0 && dt<100){
+   frameSamples.push(dt);
+   if(frameSamples.length>45)frameSamples.shift();
+   if(frameSamples.length>=20){
+    var avg=frameSamples.reduce(function(a,b){return a+b},0)/frameSamples.length;
+    // A frame taking more than ~1.8x the observed refresh budget indicates load.
+    var budget=Math.max(4.17,Math.min(16.67,avg));
+    setPerfLevel(avg>budget*1.8?'low':(avg<11?'high':'normal'));
+   }
+  }
+ }
+ function renderFrame(now){
+  frameQueued=false;
+  measureFrame(now);
+  if(pendingResize){pendingResize=false;build();}
+  if(pendingScroll){pendingScroll=false;upd();tlProg();}
+ }
+ function requestRender(){
+  pendingScroll=true;
+  if(!frameQueued){
+   frameQueued=true;
+   requestAnimationFrame(renderFrame);
+  }
+ }
+ function requestResize(){
+  pendingResize=true;
+  requestRender();
+ }
+
  function bld(x0,x1,color,hMin,hMax,wMin,wMax,seed,win){var r=rnd(seed),x=x0,o='';while(x<x1){var bw=wMin+r()*(wMax-wMin),bh=hMin+r()*(hMax-hMin);o+='<rect x="'+x.toFixed(0)+'" y="'+(320-bh).toFixed(0)+'" width="'+bw.toFixed(0)+'" height="'+bh.toFixed(0)+'" fill="'+color+'"/>';
   if(r()>.7)o+='<rect x="'+(x+bw/2-1).toFixed(0)+'" y="'+(320-bh-18).toFixed(0)+'" width="2" height="18" fill="'+color+'"/>';
   if(win){for(var y=320-bh+12;y<306;y+=18){for(var k=8;k<bw-10;k+=14){if(r()>.5)o+='<rect x="'+(x+k).toFixed(0)+'" y="'+y.toFixed(0)+'" width="6" height="8" fill="#ffe9a8" opacity=".5"/>'}}}
@@ -356,7 +494,7 @@ html.adaptive-low .cn circle{animation:none}
   mk('l3',hills(x3-150,'#26306a',270,28,0,3,true)+bld(0,x3+150,'#2d3a63',80,190,54,110,44,true)+lamps);
  }
  build();
- addEventListener('resize',function(){if(innerWidth!==lastW)build()});
+ addEventListener('resize',function(){if(innerWidth!==lastW)requestResize()});
  var BF=[[0,0],[-26,-14],[-26,14],[-52,-28],[-52,28],[-78,-42],[-78,42]],
   FL=[{n:7,sc:1.25,y:.2,s:.15,l:.3,ph:0},{n:5,sc:.8,y:.11,s:.21,l:.3,ph:2},{n:1,sc:1,y:.3,s:.18,l:.26,ph:4}],
   bu='M0 0Q6 -8 12 0Q18 -8 24 0',bd='M0 -3Q6 5 12 0Q18 5 24 -3',bh='';
@@ -409,9 +547,7 @@ html.adaptive-low .cn circle{animation:none}
   var cur=secs[0];secs.forEach(function(s){if(s.getBoundingClientRect().top<innerHeight*.55)cur=s});
   $('chap').textContent=cur.getAttribute('data-n');
  }
- var updPending=false;
- function scheduleUpd(){if(updPending)return;updPending=true;requestAnimationFrame(function(){updPending=false;upd()})}
- addEventListener('scroll',scheduleUpd,{passive:true});addEventListener('resize',scheduleUpd,{passive:true});upd();
+ addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestResize);requestRender();
  $('go').addEventListener('click',function(){$('missions').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
  function count(el){
   var to=+el.dataset.to,pre=el.dataset.pre||'',suf=el.dataset.suf||'',t0=null;
@@ -439,14 +575,25 @@ html.adaptive-low .cn circle{animation:none}
   tlP.style.strokeDashoffset=tlLen*(1-pr);
   tlDots.forEach(function(e,i){e.classList.toggle('on',reduce||tlPts[i][1]<=Y+12)});
  }
- addEventListener('scroll',tlProg,{passive:true});
- addEventListener('resize',drawTL);
+ addEventListener('scroll',requestRender,{passive:true});
+ addEventListener('resize',function(){drawTL();requestResize()});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawTL);
  addEventListener('load',drawTL);drawTL();
  if(!reduce)document.querySelectorAll('.bt').forEach(function(t){t.addEventListener('pointermove',function(e){var r=t.getBoundingClientRect();t.style.setProperty('--mx',(e.clientX-r.left)+'px');t.style.setProperty('--my',(e.clientY-r.top)+'px')})});
 
 
 })();
+
+(function(){
+ var detail=document.getElementById('mission-detail'),content=document.getElementById('md-content'),close=document.getElementById('md-close'),projects=[].slice.call(document.querySelectorAll('.ms-project')),current=0;
+ if(!detail||!content||!projects.length)return;
+ var data=[{"title": "ALS Truck Maintenance", "cat": "VR TRAINING · EDGEFORCE SOLUTIONS", "desc": "Developed a VR-based ALS Truck Maintenance Training Simulator for Edgeforce Solutions Pvt. Ltd., designed to provide Army personnel with an immersive and hands-on platform for learning vehicle maintenance procedures. The simulator reduces dependency on physical training vehicles, minimizes maintenance costs, and enables trainees to safely practice complex maintenance tasks in a virtual environment.", "contrib": ["Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR interactions.", "Collaborated with Army personnel to gather technical data, maintenance procedures, and training requirements to ensure technical accuracy.", "Implemented advanced socket-based interaction systems for precise assembly and disassembly of truck components, enabling realistic part alignment, snapping, validation, and procedural workflows.", "Created engine and vehicle system animations to demonstrate the internal working of mechanical systems and maintenance concepts.", "Utilized Spline tools for guided interactions, object movement, and training workflows.", "Built gameplay systems, UI, training logic, time-based challenges, scoring, and performance evaluation using C#.", "Developed an Admin Dashboard for monitoring trainee activities, managing student records, and generating detailed training and performance reports."], "tags": ["Unity", "C#", "Meta XR SDK", "Socket Interaction", "Spline", "VR Training", "Admin Dashboard"]}, {"title": "Bollywood Award Rush", "cat": "ANDROID GAME", "desc": "Bollywood Award Rush is an isometric-view endless runner developed for Android, featuring a vibrant Bollywood-inspired world with iconic character styles, humorous animations, and fast-paced arcade gameplay. Players dodge obstacles, collect coins, and compete for high scores while unlocking different Bollywood-themed characters throughout their journey.", "contrib": ["Developed using Unity and C#.", "Designed an isometric camera system to provide a unique gameplay perspective.", "Implemented smooth endless runner mechanics with progressively increasing difficulty.", "Created multiple Bollywood-inspired playable characters with distinct visual appearances.", "Added coin collection mechanics with engaging visual effects and rewarding gameplay feedback.", "Integrated humorous Bollywood-themed visual effects, animations, and sound effects to enhance the overall player experience.", "Developed gameplay systems, UI, score tracking, character selection, and progression mechanics.", "Optimized the game for Android devices to ensure smooth and responsive performance across various hardware configurations."], "tags": ["Unity", "C#", "Android", "Isometric Camera", "Endless Runner", "Gameplay Systems"]}, {"title": "Command Center", "cat": "VR + WEB · HAL", "desc": "Command Center is a custom VR and Web-based Remote Assistance Platform developed for Hindustan Aeronautics Limited (HAL). The platform enables field technicians using Meta Quest 3/3S to securely collaborate with remote experts through live video, two-way audio, and real-time communication.", "contrib": ["Developed the VR client using Unity, C#, and the latest Meta XR SDK.", "Integrated the Meta Quest 3/3S Passthrough Camera API to capture and stream live first-person video.", "Built APIs to securely transmit the headset’s live video feed to a web-based server.", "Developed a dedicated Audio Engine supporting low-latency two-way voice communication, along with live chat, device-specific mute, and remote disconnect controls.", "Designed the platform to support 5+ concurrent users with synchronized communication sessions.", "Optimized the streaming pipeline to deliver 720p real-time video on internet connections as low as 2 Mbps.", "Developed the backend using Node.js for authentication, session management, media handling, and communication services.", "Utilized SQLite to store user information, screenshots, session recordings, activity logs, and communication history.", "Implemented a comprehensive Network Monitoring & Analytics system to track bandwidth, latency, connection quality, packet statistics, and streaming health in real time.", "Designed and developed intuitive web dashboards for monitoring active sessions, connected devices, recordings, user activity, and overall system performance."], "tags": ["Unity", "C#", "Meta XR SDK", "Quest 3/3S", "Node.js", "SQLite", "WebSocket", "Real-time Streaming"]}, {"title": "Infinite Flight", "cat": "ANDROID GAME", "desc": "Infinite Flight is a first-person endless flying game developed for Android, where players glide through a futuristic neon-lit city while avoiding obstacles and weaving through dense aerial traffic. Instead of traditional vehicle driving, the gameplay focuses on smooth floating movement, allowing players to skillfully maneuver through tight spaces and narrow gaps to achieve the highest possible survival time.", "contrib": ["Developed using Unity and C#.", "Designed an immersive first-person flying experience with smooth floating movement.", "Implemented responsive physics-based controls for fluid navigation through the environment.", "Created an endless obstacle and traffic generation system to ensure every run feels unique.", "Designed challenging narrow passages and dynamic obstacles that reward precision and quick decision-making.", "Developed a survival time-based scoring system with progressively increasing difficulty.", "Integrated immersive background music, sound effects, and visual feedback.", "Built gameplay mechanics, UI systems, score tracking, and progression logic.", "Optimized the game for Android devices to provide consistent performance across a wide range of hardware."], "tags": ["Unity", "C#", "Android", "Physics", "Procedural Generation", "Endless Gameplay"]}, {"title": "Navika AI - IDeX Navy", "cat": "MIXED REALITY · AI · NAVY", "desc": "Navika AI is a Mixed Reality (MR) AI Assistant designed to simplify troubleshooting and maintenance of ship systems through immersive guidance. I served as the Core Developer and Software/System Architect, designing the overall application architecture and developing the end-to-end workflow that seamlessly integrates Mixed Reality, AI inference, and real-time communication into a unified troubleshooting platform.", "contrib": ["Served as the Core Developer and Software/System Architect, designing the complete application architecture, communication pipeline, and AI integration workflow.", "Developed the application using Unity, C#, and Mixed Reality (MR) technologies.", "Designed the solution to be compatible with any MR headset.", "Implemented real-time capture and transmission of the user’s field of view to a local AI inference server.", "Integrated immersive 3D guidance, contextual annotations, and AI-generated overlays within the MR environment.", "Optimized the communication pipeline to achieve AI response times below 10 seconds.", "Integrated a locally hosted AI model trained on ship-specific technical documentation and maintenance procedures to provide accurate contextual assistance."], "tags": ["Unity", "C#", "Mixed Reality", "Local AI", "AI Inference", "3D Overlays", "Real-time Communication"]}, {"title": "Painting Simulator", "cat": "VR TRAINING · EDGEFORCE SOLUTIONS", "desc": "As the Lead Developer, I developed a VR-based Industrial Painting Training Simulator for Edgeforce Solutions Pvt. Ltd. to provide a realistic and immersive training experience while significantly reducing paint consumption, material wastage, equipment wear, and overall training costs.", "contrib": ["Led the end-to-end development of the simulator using Unity, C#, and the OpenXR Toolkit.", "Created realistic paint spray effects using Unity’s Particle System.", "Integrated a physical spray gun using Arduino (C++), with optimized serial communication for low-latency input to Unity.", "Developed custom HLSL shaders to simulate Primer, Base Coat, Matte, and Gloss paint finishes.", "Built gameplay systems, UI, training workflow, scoring, and assessment modules in C#.", "Designed a centralized SQL database to manage student records, training history, performance reports, and admin logs.", "Developed a Node.js backend running on the Master PC for student authentication, session management, and activity tracking.", "Integrated REST APIs and WebSockets to synchronize trainee data and provide real-time communication between Unity and the backend server."], "tags": ["Unity", "C#", "OpenXR Toolkit", "Arduino", "C++", "HLSL", "SQL", "Node.js", "REST API", "WebSocket"]}, {"title": "Super Hero Cube", "cat": "ANDROID GAME", "desc": "Super Hero Cube is a fast-paced 3D endless runner developed for Android, where players control cube-based superheroes and navigate through an ever-changing obstacle course. The objective is to survive as long as possible, collect coins, achieve high scores, and unlock new superhero-inspired characters, creating an engaging and replayable arcade experience.", "contrib": ["Developed using Unity and C#.", "Designed smooth physics-based player movement for responsive and engaging gameplay.", "Implemented multiple superhero-themed playable characters with unique visual styles.", "Created an endless level system with progressively increasing difficulty.", "Added coin collection mechanics with visual particle effects and satisfying feedback.", "Integrated immersive background music (BGM) and sound effects to enhance the gameplay experience.", "Developed gameplay mechanics, UI, score tracking, and game progression systems.", "Optimized the game for Android devices to deliver smooth performance across a wide range of hardware."], "tags": ["Unity", "C#", "Android", "Physics", "Endless Runner", "Gameplay", "UI"]}, {"title": "Tank T-90 Maintenance", "cat": "VR TRAINING · EDGEFORCE SOLUTIONS", "desc": "Developed a VR-based T-90 Tank Maintenance Training Simulator for Edgeforce Solutions Pvt. Ltd., enabling Army personnel to gain hands-on experience in the inspection, maintenance, and servicing of the T-90 battle tank within a safe and immersive virtual environment. The simulator helps reduce reliance on operational vehicles, minimizes equipment downtime, and allows trainees to repeatedly practice complex maintenance procedures without risking damage to critical assets.", "contrib": ["Designed the complete gameplay flow and software architecture, including training progression, maintenance workflows, and assessment systems.", "Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR training.", "Implemented custom hand interaction systems to simulate realistic maintenance operations on tank components.", "Developed robust socket-based interaction systems for precise assembly, disassembly, component alignment, and maintenance validation.", "Created animated demonstrations of internal mechanical systems to help trainees understand equipment functionality and servicing.", "Utilized Spline tools for guided maintenance sequences, interactive workflows, and instructional navigation.", "Built gameplay mechanics, UI systems, training logic, scoring, and performance evaluation using C#.", "Developed an Admin Dashboard for trainee management, progress tracking, activity monitoring, and detailed performance reporting."], "tags": ["Unity", "C#", "Meta XR SDK", "Hand Interaction", "Socket Systems", "Spline", "VR Training", "Admin Dashboard"]}, {"title": "ULSB MK III Training Module", "cat": "VR TRAINING · EDGEFORCE SOLUTIONS", "desc": "Developed a VR-based ULSB MK III Training Module for Edgeforce Solutions Pvt. Ltd., designed to train Army personnel in the deployment, setup, and operation of the ULSB MK III Military Communication System. The simulator provides a realistic and immersive environment for learning field deployment procedures, reducing dependency on physical equipment while allowing trainees to repeatedly practice mission-critical tasks safely and efficiently.", "contrib": ["Designed the complete gameplay flow and software architecture, including training progression, interaction systems, module structure, and performance evaluation.", "Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR training.", "Implemented custom hand interaction systems for realistic manipulation of military communication equipment.", "Developed advanced socket-based interaction systems for cable connections, component assembly, and procedural validation.", "Utilized Spline tools to create guided training paths, interaction workflows, and instructional sequences.", "Built gameplay mechanics, UI systems, training logic, scoring, and performance evaluation using C#.", "Developed an Admin Dashboard for trainee management, activity monitoring, performance tracking, and report generation.", "Optimized the training workflow to accurately replicate real-world field deployment procedures, ensuring trainees follow the correct operational sequence during setup."], "tags": ["Unity", "C#", "Meta XR SDK", "Hand Interaction", "Socket Systems", "Spline", "VR Training", "Admin Dashboard"]}, {"title": "Welding Simulator", "cat": "VR TRAINING · EDGEFORCE SOLUTIONS", "desc": "As the Lead Developer, I developed a VR-based Welding Training Simulator for Edgeforce Solutions Pvt. Ltd. to provide Indian Army personnel with a safe, immersive, and cost-effective platform for learning professional welding techniques. The simulator reduces material wastage, equipment wear, and overall training costs while allowing trainees to practice repeatedly in a virtual environment.", "contrib": ["Led the end-to-end development of the simulator using Unity, C#, and the OpenXR Toolkit.", "Implemented realistic welding effects, including arc, sparks, smoke, molten metal, and audio feedback, using Unity’s Particle System and Visual Effect Graph.", "Developed custom gameplay systems, VR interactions, training workflow, UI, scoring, and performance evaluation in C#.", "Simulated multiple welding processes, including MIG, TIG, and ARC Welding, with configurable training parameters.", "Designed a centralized SQL database to store trainee records, assessment results, training history, and administrative logs.", "Developed a Node.js backend running on the Master PC for trainee authentication, session management, and activity tracking.", "Integrated REST APIs and WebSockets to enable secure communication between Unity and the backend, providing real-time synchronization of trainee progress and performance data.", "Built an admin dashboard to monitor student activities, generate reports, and manage training records from a centralized system."], "tags": ["Unity", "C#", "OpenXR Toolkit", "Particle System", "Visual Effect Graph", "SQL", "Node.js", "REST API", "WebSocket"]}];
+ function render(i){current=(i+projects.length)%projects.length;var p=projects[current],d=data[current],c=p.style.getPropertyValue('--c')||'#ffc93c';detail.style.setProperty('--md-c',c);detail.setAttribute('aria-hidden','false');detail.classList.add('open');document.body.style.overflow='hidden';document.getElementById('md-count').textContent=String(current+1).padStart(2,'0')+' / '+String(projects.length).padStart(2,'0');var contrib=d.contrib.map(function(x){return '<li>'+x+'</li>'}).join(''),tags=d.tags.map(function(x){return '<span>'+x+'</span>'}).join('');content.innerHTML='<div class="md-kicker">MISSION '+String(current+1).padStart(2,'0')+' · '+d.cat+'</div><h2 id="md-title">'+d.title+'</h2><div class="md-sub">PROJECT CASE STUDY · MEDIA READY</div><div class="md-media"><span class="md-media-label">PROJECT VIDEO / HERO MEDIA</span><div class="md-play">▶</div></div><div class="md-body"><div><div class="md-section-label">ABOUT THE PROJECT</div><p class="md-description">'+d.desc+'</p><div class="md-section-label" style="margin-top:26px">KEY CONTRIBUTIONS</div><ul class="md-contrib">'+contrib+'</ul></div><div><div class="md-section-label">TECHNOLOGY</div><div class="md-tags">'+tags+'</div></div></div><div class="md-gallery"><div class="md-photo">PHOTO 01</div><div class="md-photo">PHOTO 02</div><div class="md-photo">PHOTO 03</div></div><div class="md-nav"><button id="md-prev">← PREVIOUS PROJECT</button><button id="md-next">NEXT PROJECT →</button></div>';document.getElementById('md-prev').onclick=function(){render(current-1)};document.getElementById('md-next').onclick=function(){render(current+1)};}
+ function hide(){detail.classList.remove('open');detail.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+ projects.forEach(function(p,i){var b=p.querySelector('.ms-open');if(b)b.onclick=function(e){e.preventDefault();render(i)};var m=p.querySelector('.ms-media');if(m)m.onclick=function(){render(i)};});
+ close.onclick=hide;detail.querySelector('.md-backdrop').onclick=hide;document.addEventListener('keydown',function(e){if(!detail.classList.contains('open'))return;if(e.key==='Escape')hide();if(e.key==='ArrowLeft')render(current-1);if(e.key==='ArrowRight')render(current+1);});
+})();
 </script>
+
 </body>
 </html>
