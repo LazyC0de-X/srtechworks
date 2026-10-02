@@ -1,0 +1,194 @@
+ALS Truck Maintenance
+
+Developed a VR-based ALS Truck Maintenance Training Simulator for Edgeforce Solutions Pvt. Ltd., designed to provide Army personnel with an immersive and hands-on platform for learning vehicle maintenance procedures. The simulator reduces dependency on physical training vehicles, minimizes maintenance costs, and enables trainees to safely practice complex maintenance tasks in a virtual environment.
+
+The application features Basic, Intermediate, and Advanced training modules. The Basic module introduces vehicle components and maintenance procedures, while the Intermediate and Advanced modules allow trainees to perform guided and independent assembly and disassembly of truck components. A Time Trial mode evaluates trainees based on speed, accuracy, and adherence to maintenance procedures, providing real-time performance feedback and scoring.
+
+Key Contributions & Technologies
+
+> Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR interactions.
+> Collaborated with Army personnel to gather technical data, maintenance procedures, and training requirements to ensure technical accuracy.
+> Implemented advanced socket-based interaction systems for precise assembly and disassembly of truck components, enabling realistic part alignment, snapping, validation, and procedural workflows.
+> Created engine and vehicle system animations to demonstrate the internal working of mechanical systems and maintenance concepts.
+> Utilized Spline tools for guided interactions, object movement, and training workflows.
+> Built gameplay systems, UI, training logic, time-based challenges, scoring, and performance evaluation using C#.
+> Developed an Admin Dashboard for monitoring trainee activities, managing student records, and generating detailed training and performance reports.
+
+
+
+
+Bollywood Award Rush
+
+Bollywood Award Rush is an isometric-view endless runner developed for Android, featuring a vibrant Bollywood-inspired world with iconic character styles, humorous animations, and fast-paced arcade gameplay. Players dodge obstacles, collect coins, and compete for high scores while unlocking different Bollywood-themed characters throughout their journey.
+
+Game Features
+
+> Developed using Unity and C#.
+> Designed an isometric camera system to provide a unique gameplay perspective.
+> Implemented smooth endless runner mechanics with progressively increasing difficulty.
+> Created multiple Bollywood-inspired playable characters with distinct visual appearances.
+> Added coin collection mechanics with engaging visual effects and rewarding gameplay feedback.
+> Integrated humorous Bollywood-themed visual effects, animations, and sound effects to enhance the overall player experience.
+> Developed gameplay systems, UI, score tracking, character selection, and progression mechanics.
+> Optimized the game for Android devices to ensure smooth and responsive performance across various hardware configurations.
+
+
+Command Center
+
+Command Center is a custom VR and Web-based Remote Assistance Platform developed for Hindustan Aeronautics Limited (HAL). The platform enables field technicians using Meta Quest 3/3S to securely collaborate with remote experts through live video, two-way audio, and real-time communication. It allows professionals to remotely inspect, diagnose, and guide on-site personnel during maintenance and operational procedures, reducing travel time and improving response efficiency.
+
+Technical Highlights
+
+> Developed the VR client using Unity, C#, and the latest Meta XR SDK.
+> Integrated the Meta Quest 3/3S Passthrough Camera API to capture and stream live first-person video.
+> Built APIs to securely transmit the headset's live video feed to a web-based server.
+> Developed a dedicated Audio Engine supporting low-latency two-way voice communication, along with live chat, device-specific mute, and remote disconnect controls.
+> Designed the platform to support 5+ concurrent users with synchronized communication sessions.
+> Optimized the streaming pipeline to deliver 720p real-time video on internet connections as low as 2 Mbps.
+> Developed the backend using Node.js for authentication, session management, media handling, and communication services.
+> Utilized SQLite to store user information, screenshots, session recordings, activity logs, and communication history.
+> Implemented a comprehensive Network Monitoring & Analytics system to track bandwidth, latency, connection quality, packet statistics, and streaming health in real time.
+> Designed and developed intuitive web dashboards for monitoring active sessions, connected devices, recordings, user activity, and overall system performance.
+
+This project combines XR, real-time media streaming, networking, backend development, and system architecture to deliver a robust industrial remote assistance solution for mission-critical field operations.
+
+
+
+
+Infinite Flight
+
+Infinite Flight is a first-person endless flying game developed for Android, where players glide through a futuristic neon-lit city while avoiding obstacles and weaving through dense aerial traffic. Instead of traditional vehicle driving, the gameplay focuses on smooth floating movement, allowing players to skillfully maneuver through tight spaces and narrow gaps to achieve the highest possible survival time.
+
+There are no levels or finish lines—the experience is entirely endless. As the game progresses, the speed and obstacle density increase, challenging the player's reflexes, precision, and control. The longer you survive, the higher your score.
+
+Game Features
+
+> Developed using Unity and C#.
+> Designed an immersive first-person flying experience with smooth floating movement.
+> Implemented responsive physics-based controls for fluid navigation through the environment.
+> Created an endless obstacle and traffic generation system to ensure every run feels unique.
+> Designed challenging narrow passages and dynamic obstacles that reward precision and quick decision-making.
+> Developed a survival time-based scoring system with progressively increasing difficulty.
+> Integrated immersive background music, sound effects, and visual feedback to enhance the arcade experience.
+> Built gameplay mechanics, UI systems, score tracking, and progression logic.
+> Optimized the game for Android devices to provide consistent performance across a wide range of hardware.
+
+
+
+
+
+Navika AI - IDeX Navy
+
+Navika AI is a Mixed Reality (MR) AI Assistant designed to simplify troubleshooting and maintenance of ship systems through immersive guidance. I served as the Core Developer and Software/System Architect, designing the overall application architecture and developing the end-to-end workflow that seamlessly integrates Mixed Reality, AI inference, and real-time communication into a unified troubleshooting platform.
+
+The application enables technicians to capture live views of ship components, electrical circuits, and mechanical systems using an MR headset. The captured feed is transmitted to a locally hosted AI server, trained on ship maintenance manuals, technical documentation, and troubleshooting procedures. The AI analyzes the scene and returns contextual guidance in under 10 seconds, which is displayed directly within the user's field of view as 3D overlays, reference images, keywords, and step-by-step repair instructions. The platform also supports two-way voice communication and live chat, enabling seamless collaboration between technicians and remote experts.
+
+Technical Highlights
+> Served as the Core Developer and Software/System Architect, designing the complete application architecture, communication pipeline, and AI integration workflow.
+> Developed the application using Unity, C#, and Mixed Reality (MR) technologies.
+> Designed the solution to be compatible with any MR headset.
+> Implemented real-time capture and transmission of the user's field of view to a local AI inference server.
+> Integrated immersive 3D guidance, contextual annotations, and AI-generated overlays within the MR environment.
+> Optimized the communication pipeline to achieve AI response times below 10 seconds.
+> Integrated a locally hosted AI model trained on ship-specific technical documentation and maintenance procedures to provide accurate contextual assistance.
+
+
+
+
+
+
+
+Painting Simulator
+
+As the Lead Developer, I developed a VR-based Industrial Painting Training Simulator for Edgeforce Solutions Pvt. Ltd. to provide a realistic and immersive training experience while significantly reducing paint consumption, material wastage, equipment wear, and overall training costs.
+
+The simulator features Basic, Intermediate, and Advanced training modules. The Basic module introduces painting equipment, safety procedures, and spray gun operations. The Intermediate module includes a Zebra Board exercise designed to develop muscle memory, hand stability, spray consistency, and proper spray angle. The Advanced module enables trainees to practice on realistic industrial components using HVLP and Airless Spray Guns, with real-time performance evaluation and scoring.
+
+Key Contributions & Technologies
+
+Led the end-to-end development of the simulator using Unity, C#, and the OpenXR Toolkit.
+> Created realistic paint spray effects using Unity's Particle System.
+> Integrated a physical spray gun using Arduino (C++), with optimized serial communication for low-latency input to Unity.
+> Developed custom HLSL shaders to simulate Primer, Base Coat, Matte, and Gloss paint finishes.
+> Built gameplay systems, UI, training workflow, scoring, and assessment modules in C#.
+> Designed a centralized SQL database to manage student records, training history, performance reports, and admin logs.
+> Developed a Node.js backend running on the Master PC for student authentication, session management, and activity tracking.
+> Integrated REST APIs and WebSockets to synchronize trainee data and provide real-time communication between Unity and the backend server.
+
+
+
+
+
+Super Hero Cube
+
+Super Hero Cube is a fast-paced 3D endless runner developed for Android, where players control cube-based superheroes and navigate through an ever-changing obstacle course. The objective is to survive as long as possible, collect coins, achieve high scores, and unlock new superhero-inspired characters, creating an engaging and replayable arcade experience.
+
+Game Features
+> Developed using Unity and C#.
+> Designed smooth physics-based player movement for responsive and engaging gameplay.
+> Implemented multiple superhero-themed playable characters with unique visual styles.
+> Created an endless level system with progressively increasing difficulty.
+> Added coin collection mechanics with visual particle effects and satisfying feedback.
+> Integrated immersive background music (BGM) and sound effects to enhance the gameplay experience.
+> Developed gameplay mechanics, UI, score tracking, and game progression systems.
+> Optimized the game for Android devices to deliver smooth performance across a wide range of hardware.
+
+
+
+
+
+Tank T-90 Maintenance
+
+Developed a VR-based T-90 Tank Maintenance Training Simulator for Edgeforce Solutions Pvt. Ltd., enabling Army personnel to gain hands-on experience in the inspection, maintenance, and servicing of the T-90 battle tank within a safe and immersive virtual environment. The simulator helps reduce reliance on operational vehicles, minimizes equipment downtime, and allows trainees to repeatedly practice complex maintenance procedures without risking damage to critical assets.
+
+The application is divided into Basic, Intermediate, and Advanced training modules. Trainees learn component identification, maintenance procedures, fault diagnosis, and guided assembly/disassembly of critical tank systems. A Time Trial mode measures procedural accuracy, efficiency, and task completion time while providing real-time performance evaluation and scoring.
+
+Key Contributions & Technologies
+
+> Designed the complete gameplay flow and software architecture, including training progression, maintenance workflows, and assessment systems.
+> Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR training.
+> Implemented custom hand interaction systems to simulate realistic maintenance operations on tank components.
+> Developed robust socket-based interaction systems for precise assembly, disassembly, component alignment, and maintenance validation.
+> Created animated demonstrations of internal mechanical systems to help trainees understand equipment functionality and servicing procedures.
+> Utilized Spline tools for guided maintenance sequences, interactive workflows, and instructional navigation.
+> Built gameplay mechanics, UI systems, training logic, scoring, and performance evaluation using C#.
+> Developed an Admin Dashboard for trainee management, progress tracking, activity monitoring, and detailed performance reporting.
+
+
+
+
+ULSB MK III Training Module
+
+Developed a VR-based ULSB MK III Training Module for Edgeforce Solutions Pvt. Ltd., designed to train Army personnel in the deployment, setup, and operation of the ULSB MK III Military Communication System. The simulator provides a realistic and immersive environment for learning field deployment procedures, reducing dependency on physical equipment while allowing trainees to repeatedly practice mission-critical tasks safely and efficiently.
+
+The application features Basic, Intermediate, and Advanced training modules. Trainees learn component identification, equipment assembly, cable routing, field setup procedures, and operational workflows. A Time Trial mode evaluates trainees based on setup accuracy, procedural compliance, and completion time, with real-time performance feedback and scoring.
+
+Key Contributions & Technologies
+
+> Designed the complete gameplay flow and software architecture, including training progression, interaction systems, module structure, and performance evaluation.
+> Developed the simulator using Unity, C#, and the latest Meta XR SDK for immersive VR training.
+> Implemented custom hand interaction systems for realistic manipulation of military communication equipment.
+> Developed advanced socket-based interaction systems for cable connections, component assembly, and procedural validation.
+> Utilized Spline tools to create guided training paths, interaction workflows, and instructional sequences.
+> Built gameplay mechanics, UI systems, training logic, scoring, and performance evaluation using C#.
+> Developed an Admin Dashboard for trainee management, activity monitoring, performance tracking, and report generation.
+> Optimized the training workflow to accurately replicate real-world field deployment procedures, ensuring trainees follow the correct operational sequence during setup.
+
+
+
+Welding Simulator
+
+As the Lead Developer, I developed a VR-based Welding Training Simulator for Edgeforce Solutions Pvt. Ltd. to provide Indian Army personnel with a safe, immersive, and cost-effective platform for learning professional welding techniques. The simulator reduces material wastage, equipment wear, and overall training costs while allowing trainees to practice repeatedly in a virtual environment.
+
+The application consists of Basic, Intermediate, and Advanced training modules. The Basic module introduces welding equipment, safety procedures, and machine setup. The Intermediate module focuses on developing proper welding techniques, hand movement, torch angle, and travel speed. The Advanced module enables trainees to perform realistic welding tasks on complex components while receiving real-time feedback, performance scoring, and assessment.
+
+Key Contributions & Technologies
+
+> Led the end-to-end development of the simulator using Unity, C#, and the OpenXR Toolkit.
+> Implemented realistic welding effects, including arc, sparks, smoke, molten metal, and audio feedback, using Unity's Particle System and Visual Effect Graph.
+> Developed custom gameplay systems, VR interactions, training workflow, UI, scoring, and performance evaluation in C#.
+> Simulated multiple welding processes, including MIG, TIG, and ARC Welding, with configurable training parameters.
+> Designed a centralized SQL database to store trainee records, assessment results, training history, and administrative logs.
+> Developed a Node.js backend running on the Master PC for trainee authentication, session management, and activity tracking.
+> Integrated REST APIs and WebSockets to enable secure communication between Unity and the backend, providing real-time synchronization of trainee progress and performance data.
+> Built an admin dashboard to monitor student activities, generate reports, and manage training records from a centralized system.
