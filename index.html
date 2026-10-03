@@ -388,6 +388,27 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 .riding header>*{background:rgba(16,20,56,.95)}
 .riding #stars i,.riding .cn circle,.riding .cn path{animation-play-state:paused}
 .riding .ms-media i,.riding .ms-project{transition:none}
+
+/* Device tiers: desktop = full effects, mobile = lighter blur, low = no blur */
+.tier-mobile .glass,.tier-mobile .bt,.tier-mobile .ms-media,.tier-mobile .soc .ic,.tier-mobile header>*{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.tier-mobile #mission-detail .md-panel,.tier-mobile #email-modal .em-panel{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.tier-mobile #mission-detail .md-top{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tier-mobile #mission-detail .md-backdrop,.tier-mobile #email-modal .em-backdrop{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.tier-mobile #stars i{box-shadow:none}
+.tier-low .glass,.tier-low .bt,.tier-low .ms-media,.tier-low .soc .ic,.tier-low header>*,
+.tier-low #mission-detail .md-panel,.tier-low #mission-detail .md-top,.tier-low #mission-detail .md-backdrop,
+.tier-low #email-modal .em-panel,.tier-low #email-modal .em-backdrop{-webkit-backdrop-filter:none;backdrop-filter:none}
+.tier-low .glass,.tier-low .bt,.tier-low .ms-media{background-color:rgba(18,22,66,.86)}
+.tier-low .soc .ic{background-color:rgba(18,22,66,.85)}
+.tier-low header>*{background:rgba(16,20,56,.95)}
+.tier-low #mission-detail .md-panel,.tier-low #email-modal .em-panel{background-color:rgba(18,22,66,.97)}
+.tier-low #mission-detail .md-top{background:rgba(18,22,66,.97)}
+.tier-low #stars i{animation:none;box-shadow:none}
+.tier-low .cn,.tier-low .cl{display:none}
+.tier-low #sun{box-shadow:0 0 40px 10px rgba(255,200,100,.5)}
+.tier-low .bt:after{display:none}
+.tier-low .wave .pulse,.tier-low .in .bar i:before,.tier-low .in .dots i.pl{animation:none}
+.tier-low .pfeat{animation:none}
 </style>
 </head>
 <body>
@@ -540,6 +561,21 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  function rnd(s){return function(){s=(s*16807)%2147483647;return s/2147483647}}
  function cl(v,a,b){return Math.min(b,Math.max(a,v))}
  var W=4200,lastY=scrollY,lastW=0;
+ // Device tier: picks a lighter or fuller visual profile per device.
+ // Test any profile by adding ?perf=low, ?perf=mobile or ?perf=desktop to the URL.
+ var PQ=(location.search.match(/[?&]perf=(low|mobile|desktop)/)||[])[1],NV=navigator,
+  MEM=NV.deviceMemory||4,CORES=NV.hardwareConcurrency||4,
+  COARSE=matchMedia('(pointer:coarse)').matches,
+  SMALL=Math.min(screen.width,screen.height)<700||innerWidth<820,
+  SAVE=!!(NV.connection&&NV.connection.saveData),
+  TIER=PQ||((SAVE||MEM<=2||CORES<=2)?'low':((COARSE||SMALL)?'mobile':'desktop')),
+  TIERS={
+   desktop:{stars:130,shoot:true,win:true,W:4200,speed:110,birds:true},
+   mobile:{stars:60,shoot:false,win:true,W:2600,speed:100,birds:true},
+   low:{stars:35,shoot:false,win:false,W:2000,speed:90,birds:false}
+  },T=TIERS[TIER];
+ W=T.W;
+ document.documentElement.classList.add('tier-'+TIER);
 
  // Adaptive rendering: follow the display's native refresh cadence and
  // automatically reduce decorative work when the browser is under load.
@@ -560,7 +596,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
     var avg=frameSamples.reduce(function(a,b){return a+b},0)/frameSamples.length;
     // A frame taking more than ~1.8x the observed refresh budget indicates load.
     var budget=Math.max(4.17,Math.min(16.67,avg));
-    setPerfLevel(avg>budget*1.8?'low':(avg<11?'high':'normal'));
+    if(perfLevel!=='low')setPerfLevel(avg>26?'low':(avg<11?'high':'normal'));
    }
   }
  }
@@ -600,7 +636,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   for(var lx=70;lx<x3+100;lx+=230)lamps+='<rect x="'+lx+'" y="262" width="3" height="58" fill="#14183f"/><circle cx="'+(lx+1.5)+'" cy="260" r="14" fill="#ffe9a8" opacity=".22"/><circle cx="'+(lx+1.5)+'" cy="260" r="4" fill="#ffe9a8"/>';
   mk('l1',hills(x1-150,'#8a78b8',250,170,130,5,false)+bld(0,x1+150,'#a9b8de',70,150,30,64,21,false));
   mk('l2',hills(x2-150,'#5a5ca0',280,110,90,11,false)+bld(0,x2+150,'#7384c0',90,200,40,84,33,false));
-  mk('l3',hills(x3-150,'#26306a',270,28,0,3,true)+bld(0,x3+150,'#2d3a63',80,190,54,110,44,true)+lamps);
+  mk('l3',hills(x3-150,'#26306a',270,28,0,3,true)+bld(0,x3+150,'#2d3a63',80,190,54,110,44,T.win)+lamps);
  }
  build();
  addEventListener('resize',function(){if(innerWidth!==lastW)requestResize()});
@@ -609,10 +645,11 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   bu='M0 0Q6 -8 12 0Q18 -8 24 0',bd='M0 -3Q6 5 12 0Q18 5 24 -3',bh='';
  FL.forEach(function(F,i){bh+='<g id="fk'+i+'"><g class="fm">';for(var j=0;j<F.n;j++){var o=BF[j],d=(.65+((i*3+j)%4)*.08).toFixed(2);bh+='<path d="'+bu+'" transform="translate('+(o[0]-12)+','+o[1]+')"><animate attributeName="d" dur="'+d+'s" begin="-'+(j*.17).toFixed(2)+'s" repeatCount="indefinite" values="'+bu+';'+bd+';'+bu+'"/></path>'}bh+='</g></g>'});
  $('birds').innerHTML=bh;FL.forEach(function(F,i){F.el=$('fk'+i)});
+ if(!T.birds){FL=[];$('birds').innerHTML=''}
  var st=$('stars'),r=rnd(97),h='';
  var cols=['#ffffff','#ffffff','#ffe9a8','#bfe1ff','#ffd0e8'];
- for(var i=0;i<130;i++){var z=r()*2.6+1.4,c=cols[Math.floor(r()*cols.length)];h+='<i style="left:'+(r()*100).toFixed(1)+'%;top:'+(r()*100).toFixed(1)+'%;width:'+z.toFixed(1)+'px;height:'+z.toFixed(1)+'px;color:'+c+';animation-duration:'+(1.8+r()*3.4).toFixed(1)+'s;animation-delay:-'+(r()*4).toFixed(1)+'s"></i>'}
- h+='<u style="left:80%;top:14%;animation-duration:8s"></u><u style="left:94%;top:38%;animation-duration:12s;animation-delay:4s"></u>';
+ for(var i=0;i<T.stars;i++){var z=r()*2.6+1.4,c=cols[Math.floor(r()*cols.length)];h+='<i style="left:'+(r()*100).toFixed(1)+'%;top:'+(r()*100).toFixed(1)+'%;width:'+z.toFixed(1)+'px;height:'+z.toFixed(1)+'px;color:'+c+';animation-duration:'+(1.8+r()*3.4).toFixed(1)+'s;animation-delay:-'+(r()*4).toFixed(1)+'s"></i>'}
+ if(T.shoot)h+='<u style="left:80%;top:14%;animation-duration:8s"></u><u style="left:94%;top:38%;animation-duration:12s;animation-delay:4s"></u>';
  st.insertAdjacentHTML('afterbegin',h);
  function hex(c){return[1,3,5].map(function(i){return parseInt(c.substr(i,2),16)})}
  function mix(a,b,t){a=hex(a);b=hex(b);return'rgb('+a.map(function(v,i){return Math.round(v+(b[i]-v)*t)}).join(',')+')'}
@@ -661,7 +698,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  }
  addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestResize);requestRender();
  // Start the ride: slow automatic scroll to the end. Any user input stops it.
- var SPEED=110,auto=false,autoRaf=0,autoPos=0,autoLast=0;
+ var SPEED=T.speed,auto=false,autoRaf=0,autoPos=0,autoLast=0;
  function stopAuto(){if(!auto)return;auto=false;cancelAnimationFrame(autoRaf);document.documentElement.classList.remove('riding')}
  function autoStep(t){
   if(!auto)return;
