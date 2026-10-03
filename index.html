@@ -415,13 +415,18 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 .tier-mobile .pfeat,.riding .pfeat{animation-play-state:paused}
 .tier-mobile .pfeat{animation:none}
 
-@supports (height:100lvh){#stage{bottom:auto;height:100lvh}}
 
 /* Stable background: sun, clouds and road dashes move by transform only */
 #sun{top:0;will-change:transform}
 .cl{will-change:transform}
 #dash{left:-100px;right:-100px;will-change:transform}
 #stage{transform:translateZ(0)}
+
+/* The page scrolls inside #scroller, not the document. Phone browsers then keep the
+   address bar fixed, so the viewport (and the bottom-anchored scene) never changes size. */
+html,body{height:100%;overflow:hidden}
+body{overscroll-behavior:none}
+#scroller{position:fixed;inset:0;z-index:2;overflow-x:hidden;overflow-y:auto;overscroll-behavior:none;-webkit-overflow-scrolling:touch;outline:none;scrollbar-width:thin;scrollbar-color:rgba(255,244,224,.35) transparent}
 </style>
 </head>
 <body>
@@ -458,6 +463,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 
 <header><span id="chap">Base camp</span><span id="odo">0 km driven</span></header>
 
+<div id="scroller" tabindex="-1">
 <main>
  <section class="stop hero" data-n="Base camp"><div>
   <h1>Shubham Raj</h1>
@@ -527,6 +533,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   </nav>
  </section>
 </main>
+</div>
 
 
 <div id="email-modal" aria-hidden="true">
@@ -565,15 +572,16 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 (function(){
  document.documentElement.classList.add('js');
  // Always start from the top on refresh / back-forward
+ var SC=document.getElementById('scroller');
  if('scrollRestoration' in history)history.scrollRestoration='manual';
  if(location.hash&&history.replaceState)history.replaceState(null,'',location.pathname+location.search);
- scrollTo(0,0);
- addEventListener('pageshow',function(e){if(e.persisted)scrollTo(0,0)});
+ SC.scrollTop=0;try{SC.focus({preventScroll:true})}catch(e){}
+ addEventListener('pageshow',function(e){if(e.persisted)SC.scrollTop=0});
  var $=function(i){return document.getElementById(i)};
  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
  function rnd(s){return function(){s=(s*16807)%2147483647;return s/2147483647}}
  function cl(v,a,b){return Math.min(b,Math.max(a,v))}
- var W=4200,lastY=scrollY,lastW=0,curBack=false;
+ var W=4200,lastY=0,lastW=0,curBack=false;
  // Device tier: picks a lighter or fuller visual profile per device.
  // Test any profile by adding ?perf=low, ?perf=mobile or ?perf=desktop to the URL.
  var PQ=(location.search.match(/[?&]perf=(low|mobile|desktop)/)||[])[1],NV=navigator,
@@ -589,18 +597,13 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   },T=TIERS[TIER];
  W=T.W;
  document.documentElement.classList.add('tier-'+TIER);
- // Stable viewport height: mobile browsers resize innerHeight whenever the address bar
- // slides in/out while scrolling, which made the scene jump. Use the large viewport instead.
- var probe=document.createElement('div');
- probe.style.cssText='position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none';
- document.body.appendChild(probe);
- var VW=innerWidth,VH=probe.offsetHeight||window.innerHeight;
- addEventListener('resize',function(){if(innerWidth!==VW){VW=innerWidth;VH=probe.offsetHeight||window.innerHeight;requestRender()}});
+ var VW=innerWidth,VH=window.innerHeight;
+ addEventListener('resize',function(){VW=innerWidth;VH=window.innerHeight;requestRender()});
 
  // Adaptive rendering: follow the display's native refresh cadence and
  // automatically reduce decorative work when the browser is under load.
  var frameQueued=false,lastFrame=performance.now(),frameSamples=[],perfLevel='normal';
- var pendingScroll=true,pendingResize=true,sy=scrollY,lastSm=0;
+ var pendingScroll=true,pendingResize=true,sy=SC.scrollTop,lastSm=0;
  function setPerfLevel(level){
   if(level===perfLevel)return;
   perfLevel=level;
@@ -624,7 +627,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   frameQueued=false;
   measureFrame(now);
   if(pendingResize){pendingResize=false;if(innerWidth!==lastW)build();}
-  var tgt=scrollY;
+  var tgt=SC.scrollTop;
   if(!reduce&&T.smooth>0){
    var dt=lastSm?Math.min(64,now-lastSm):16.7;lastSm=now;
    sy+=(tgt-sy)*(1-Math.exp(-dt/T.smooth));
@@ -684,11 +687,11 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  function sky(p){for(var i=0;i<K.length-1;i++){if(p<=K[i+1][0]){var t=(p-K[i][0])/(K[i+1][0]-K[i][0]);return'linear-gradient('+mix(K[i][1],K[i+1][1],t)+','+mix(K[i][2],K[i+1][2],t)+')'}}return'#05061a'}
  var secs=[].slice.call(document.querySelectorAll('.stop')),clouds=document.querySelectorAll('.cl'),whs=document.querySelectorAll('.wh'),secTops=[],tlTopAbs=0;
  function S(el,p,v){var c=el._c||(el._c={});if(c[p]!==v){c[p]=v;el.style[p]=v}}
- function calcTops(){secTops=secs.map(function(s){return s.getBoundingClientRect().top+scrollY})}
+ function calcTops(){secTops=secs.map(function(s){return s.getBoundingClientRect().top+SC.scrollTop})}
  calcTops();addEventListener('load',function(){calcTops();setTimeout(calcTops,1200)});var tW=innerWidth;addEventListener('resize',function(){if(innerWidth!==tW){tW=innerWidth;calcTops()}});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(calcTops);
  function upd(){
-  var max=document.documentElement.scrollHeight-VH,p=max>0?cl(sy/max,0,1):0;
+  var max=SC.scrollHeight-SC.clientHeight,p=max>0?cl(sy/max,0,1):0;
   var d=p/.6,q=cl(d,0,1),lp=cl((p-.6)/.12,0,1),vh=VH/100,tr=W-innerWidth-20;
   S($('sky'),'background',sky(p));
   var dy=sy-lastY;if(Math.abs(dy)>10){var bk=dy<0;if(bk!==curBack){curBack=bk;$('rover').classList.toggle('back',bk);$('birds').classList.toggle('back',bk)}lastY=sy}
@@ -723,22 +726,22 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   var cur=secs[0];for(var si=0;si<secs.length;si++){if(secTops[si]-sy<VH*.55)cur=secs[si]}
   var ct=cur.getAttribute('data-n');if($('chap')._t!==ct){$('chap')._t=ct;$('chap').textContent=ct}
  }
- addEventListener('scroll',requestRender,{passive:true});requestRender();
+ SC.addEventListener('scroll',requestRender,{passive:true});requestRender();
  // Start the ride: slow automatic scroll to the end. Any user input stops it.
  var SPEED=T.speed,auto=false,autoRaf=0,autoPos=0,autoLast=0;
  function stopAuto(){if(!auto)return;auto=false;cancelAnimationFrame(autoRaf);document.documentElement.classList.remove('riding')}
  function autoStep(t){
   if(!auto)return;
   var dt=Math.min(64,t-autoLast)/1000;autoLast=t;
-  var max=document.documentElement.scrollHeight-VH;
+  var max=SC.scrollHeight-SC.clientHeight;
   autoPos=Math.min(max,autoPos+SPEED*dt);
-  scrollTo(0,autoPos);
+  SC.scrollTop=autoPos;
   if(autoPos>=max-1){auto=false;document.documentElement.classList.remove('riding');return}
   autoRaf=requestAnimationFrame(autoStep);
  }
  ['wheel','touchstart','keydown','pointerdown'].forEach(function(ev){addEventListener(ev,stopAuto,{passive:true})});
  $('go').addEventListener('click',function(){
-  stopAuto();auto=true;document.documentElement.classList.add('riding');autoPos=scrollY;autoLast=performance.now();
+  stopAuto();auto=true;document.documentElement.classList.add('riding');autoPos=SC.scrollTop;autoLast=performance.now();
   autoRaf=requestAnimationFrame(autoStep);
  });
  function count(el){
@@ -751,7 +754,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  var tlBox=$('tl2'),tlP=$('tp'),tlB=$('tb'),tlS=$('tlsvg'),tlDots=[].slice.call(tlBox.querySelectorAll('.dot')),tlPts=[],tlLen=0,tlY0=0,tlY1=1;
  function drawTL(){
   var b=tlBox.getBoundingClientRect();
-  tlTopAbs=b.top+scrollY;
+  tlTopAbs=b.top+SC.scrollTop;
   tlPts=tlDots.map(function(d){var r=d.getBoundingClientRect();return[r.left-b.left+r.width/2,r.top-b.top+r.height/2]});
   var P=tlPts,d='M'+P[0][0]+','+(P[0][1]-70)+' L'+P[0][0]+','+P[0][1];
   for(var i=1;i<P.length;i++){var a=P[i-1],c=P[i],m=(a[1]+c[1])/2;d+=' C'+a[0]+','+m+' '+c[0]+','+m+' '+c[0]+','+c[1]}
@@ -763,12 +766,12 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  }
  function tlProg(){
   if(!tlLen)return;
-  var Y=VH*.62-(tlTopAbs-scrollY);
+  var Y=VH*.62-(tlTopAbs-SC.scrollTop);
   var pr=reduce?1:cl((Y-tlY0)/(tlY1-tlY0),0,1);
   tlP.style.strokeDashoffset=tlLen*(1-pr);
   tlDots.forEach(function(e,i){e.classList.toggle('on',reduce||tlPts[i][1]<=Y+12)});
  }
- addEventListener('scroll',requestRender,{passive:true});
+ SC.addEventListener('scroll',requestRender,{passive:true});
  var dW=innerWidth;addEventListener('resize',function(){if(innerWidth!==dW){dW=innerWidth;drawTL();requestResize()}});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawTL);
  addEventListener('load',drawTL);drawTL();
