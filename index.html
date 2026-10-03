@@ -409,6 +409,11 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 .tier-low .bt:after{display:none}
 .tier-low .wave .pulse,.tier-low .in .bar i:before,.tier-low .in .dots i.pl{animation:none}
 .tier-low .pfeat{animation:none}
+
+/* Smoothness: GPU hints and cheaper planet surface */
+#rover,#rocket{will-change:transform}
+.tier-mobile .pfeat,.riding .pfeat{animation-play-state:paused}
+.tier-mobile .pfeat{animation:none}
 </style>
 </head>
 <body>
@@ -570,9 +575,9 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   SAVE=!!(NV.connection&&NV.connection.saveData),
   TIER=PQ||((SAVE||MEM<=2||CORES<=2)?'low':((COARSE||SMALL)?'mobile':'desktop')),
   TIERS={
-   desktop:{stars:130,shoot:true,win:true,W:4200,speed:110,birds:true},
-   mobile:{stars:60,shoot:false,win:true,W:2600,speed:100,birds:true},
-   low:{stars:35,shoot:false,win:false,W:2000,speed:90,birds:false}
+   desktop:{stars:130,shoot:true,win:true,W:4200,speed:110,birds:true,smooth:70},
+   mobile:{stars:60,shoot:false,win:true,W:2600,speed:100,birds:true,smooth:90},
+   low:{stars:35,shoot:false,win:false,W:2000,speed:90,birds:false,smooth:110}
   },T=TIERS[TIER];
  W=T.W;
  document.documentElement.classList.add('tier-'+TIER);
@@ -580,7 +585,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  // Adaptive rendering: follow the display's native refresh cadence and
  // automatically reduce decorative work when the browser is under load.
  var frameQueued=false,lastFrame=performance.now(),frameSamples=[],perfLevel='normal';
- var pendingScroll=true,pendingResize=true;
+ var pendingScroll=true,pendingResize=true,sy=scrollY,lastSm=0;
  function setPerfLevel(level){
   if(level===perfLevel)return;
   perfLevel=level;
@@ -603,8 +608,15 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  function renderFrame(now){
   frameQueued=false;
   measureFrame(now);
-  if(pendingResize){pendingResize=false;build();}
-  if(pendingScroll){pendingScroll=false;upd();tlProg();}
+  if(pendingResize){pendingResize=false;if(innerWidth!==lastW)build();}
+  var tgt=scrollY;
+  if(!reduce&&T.smooth>0){
+   var dt=lastSm?Math.min(64,now-lastSm):16.7;lastSm=now;
+   sy+=(tgt-sy)*(1-Math.exp(-dt/T.smooth));
+   if(Math.abs(tgt-sy)<.4)sy=tgt;
+  }else sy=tgt;
+  pendingScroll=false;upd();tlProg();
+  if(sy!==tgt)requestRender();else lastSm=0;
  }
  function requestRender(){
   pendingScroll=true;
@@ -658,10 +670,10 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  var secs=[].slice.call(document.querySelectorAll('.stop')),clouds=document.querySelectorAll('.cl'),whs=document.querySelectorAll('.wh'),secTops=[],tlTopAbs=0;
  function S(el,p,v){var c=el._c||(el._c={});if(c[p]!==v){c[p]=v;el.style[p]=v}}
  function calcTops(){secTops=secs.map(function(s){return s.getBoundingClientRect().top+scrollY})}
- calcTops();addEventListener('load',function(){calcTops();setTimeout(calcTops,1200)});addEventListener('resize',calcTops);
+ calcTops();addEventListener('load',function(){calcTops();setTimeout(calcTops,1200)});var tW=innerWidth;addEventListener('resize',function(){if(innerWidth!==tW){tW=innerWidth;calcTops()}});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(calcTops);
  function upd(){
-  var max=document.documentElement.scrollHeight-innerHeight,p=max>0?cl(scrollY/max,0,1):0;
+  var max=document.documentElement.scrollHeight-innerHeight,p=max>0?cl(sy/max,0,1):0;
   var d=p/.6,q=cl(d,0,1),lp=cl((p-.6)/.12,0,1),vh=innerHeight/100,tr=W-innerWidth-20;
   S($('sky'),'background',sky(p));
   var dy=scrollY-lastY;if(Math.abs(dy)>1){$('rover').classList.toggle('back',dy<0);$('birds').classList.toggle('back',dy<0);lastY=scrollY}
@@ -673,8 +685,8 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   S($('l1'),'transform','translate3d('+Math.round(-q*tr*.15)+'px,0,0)');
   S($('l2'),'transform','translate3d('+Math.round(-q*tr*.4)+'px,0,0)');
   S($('l3'),'transform','translate3d('+Math.round(-q*tr*.9)+'px,0,0)');
-  $('dash').style.backgroundPosition=(-(scrollY*1.8)%100)+'px 0';
-    var wr=(scrollY*.6).toFixed(1)+'deg';for(var wi=0;wi<whs.length;wi++)whs[wi].style.setProperty('--r',wr);
+  S($('dash'),'backgroundPosition',(-(sy*1.8)%100).toFixed(1)+'px 0');
+    var wr=(sy*.6).toFixed(1)+'deg';for(var wi=0;wi<whs.length;wi++)whs[wi].style.setProperty('--r',wr);
   $('sun').style.top=(12+Math.pow(Math.abs(p-.12)*2.2,1.3)*65)+'vh';
   S($('sun'),'opacity',String(1-cl((p-.35)/.15,0,1)));S($('sun'),'display',p>.5?'none':'');
   clouds.forEach(function(c,k){c.style.marginLeft=(-p*200*(k+1)*.5)+'px';c.style.opacity=.85*(1-cl((p-.45)/.15,0,1))});
@@ -693,10 +705,10 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   $('veh').style.pointerEvents='none';
   var km=p<.6?Math.round(d*240)+' km driven':Math.round(cl((p-.6)/.4,0,1)*408)+' km up';
   var ot=land>.99?'landed':km;if($('odo')._t!==ot){$('odo')._t=ot;$('odo').textContent=ot}
-  var cur=secs[0];for(var si=0;si<secs.length;si++){if(secTops[si]-scrollY<innerHeight*.55)cur=secs[si]}
+  var cur=secs[0];for(var si=0;si<secs.length;si++){if(secTops[si]-sy<innerHeight*.55)cur=secs[si]}
   var ct=cur.getAttribute('data-n');if($('chap')._t!==ct){$('chap')._t=ct;$('chap').textContent=ct}
  }
- addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestResize);requestRender();
+ addEventListener('scroll',requestRender,{passive:true});requestRender();
  // Start the ride: slow automatic scroll to the end. Any user input stops it.
  var SPEED=T.speed,auto=false,autoRaf=0,autoPos=0,autoLast=0;
  function stopAuto(){if(!auto)return;auto=false;cancelAnimationFrame(autoRaf);document.documentElement.classList.remove('riding')}
@@ -742,7 +754,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   tlDots.forEach(function(e,i){e.classList.toggle('on',reduce||tlPts[i][1]<=Y+12)});
  }
  addEventListener('scroll',requestRender,{passive:true});
- addEventListener('resize',function(){drawTL();requestResize()});
+ var dW=innerWidth;addEventListener('resize',function(){if(innerWidth!==dW){dW=innerWidth;drawTL();requestResize()}});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawTL);
  addEventListener('load',drawTL);drawTL();
  if(!reduce)document.querySelectorAll('.bt').forEach(function(t){t.addEventListener('pointermove',function(e){var r=t.getBoundingClientRect();t.style.setProperty('--mx',(e.clientX-r.left)+'px');t.style.setProperty('--my',(e.clientY-r.top)+'px')})});
