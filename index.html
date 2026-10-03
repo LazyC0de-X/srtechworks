@@ -650,7 +650,23 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   $('chap').textContent=cur.getAttribute('data-n');
  }
  addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestResize);requestRender();
- $('go').addEventListener('click',function(){$('missions').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+ // Start the ride: slow automatic scroll to the end. Any user input stops it.
+ var SPEED=110,auto=false,autoRaf=0,autoPos=0,autoLast=0;
+ function stopAuto(){if(!auto)return;auto=false;cancelAnimationFrame(autoRaf)}
+ function autoStep(t){
+  if(!auto)return;
+  var dt=Math.min(64,t-autoLast)/1000;autoLast=t;
+  var max=document.documentElement.scrollHeight-innerHeight;
+  autoPos=Math.min(max,autoPos+SPEED*dt);
+  scrollTo(0,autoPos);
+  if(autoPos>=max-1){auto=false;return}
+  autoRaf=requestAnimationFrame(autoStep);
+ }
+ ['wheel','touchstart','keydown','pointerdown'].forEach(function(ev){addEventListener(ev,stopAuto,{passive:true})});
+ $('go').addEventListener('click',function(){
+  stopAuto();auto=true;autoPos=scrollY;autoLast=performance.now();
+  autoRaf=requestAnimationFrame(autoStep);
+ });
  function count(el){
   var to=+el.dataset.to,pre=el.dataset.pre||'',suf=el.dataset.suf||'',t0=null;
   function f(t){if(!t0)t0=t;var k=reduce?1:cl((t-t0)/1300,0,1);k=1-Math.pow(1-k,3);el.textContent=pre+Math.round(to*k)+suf;if(k<1)requestAnimationFrame(f)}
