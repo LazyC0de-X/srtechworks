@@ -374,6 +374,13 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 #email-modal .em-send:disabled{opacity:.65;cursor:wait;filter:none}
 @media(max-width:560px){#email-modal{padding:12px}#email-modal .em-panel{padding:22px;border-radius:22px}#email-modal .em-actions{flex-direction:column-reverse}#email-modal .em-actions button{width:100%}}
 @media(prefers-reduced-motion:reduce){#email-modal,#email-modal .em-panel{transition:none}}
+
+/* Project thumbnails (cards) */
+.ms-media img.th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:brightness(.78) saturate(1.1);transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s}
+.ms-project:hover .ms-media img.th{transform:scale(1.05);filter:brightness(.9) saturate(1.15)}
+.ms-media.has-th span,.ms-media.has-th b{text-shadow:0 2px 12px rgba(5,6,26,.85)}
+.ms-media.has-th span{color:rgba(255,244,224,.55)}
+#mission-detail .md-media.has-poster{background-size:cover;background-position:center}
 </style>
 </head>
 <body>
@@ -744,10 +751,29 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   '1yDVp64gkMkjfKHwAPcGa2WgW7xD64DGF', // 09 ULSB MK III
   '1jg8i48DlsKK9hme-n8dUjPiUiSoWLcG8'  // 10 Welding Simulator
  ];
+ // Thumbnails: put images in /thumbs/01.jpg ... 10.jpg. Missing files keep the placeholder.
+ var thumbs=projects.map(function(p,i){return 'thumbs/'+String(i+1).padStart(2,'0')+'.jpg'}),thumbOk=[];
+ projects.forEach(function(p,i){
+  var m=p.querySelector('.ms-media');if(!m)return;
+  var im=new Image();
+  im.onload=function(){
+   thumbOk[i]=true;
+   im.className='th';im.alt='';im.decoding='async';im.loading='lazy';
+   m.insertBefore(im,m.firstChild);m.classList.add('has-th');
+  };
+  im.src=thumbs[i];
+ });
  function render(i){current=(i+projects.length)%projects.length;var p=projects[current],d=data[current],c=p.style.getPropertyValue('--c')||'#ffc93c';detail.style.setProperty('--md-c',c);detail.setAttribute('aria-hidden','false');detail.classList.add('open');document.body.style.overflow='hidden';document.getElementById('md-count').textContent=String(current+1).padStart(2,'0')+' / '+String(projects.length).padStart(2,'0');var contrib=d.contrib.map(function(x){return '<li>'+x+'</li>'}).join(''),tags=d.tags.map(function(x){return '<span>'+x+'</span>'}).join('');content.innerHTML='<div class="md-kicker">MISSION '+String(current+1).padStart(2,'0')+' · '+d.cat+'</div><h2 id="md-title">'+d.title+'</h2><div class="md-sub">PROJECT CASE STUDY · MEDIA READY</div><div class="md-media" id="md-media"><span class="md-media-label">'+(videos[current]?'PROJECT VIDEO':'VIDEO COMING SOON')+'</span><div class="md-play">▶</div></div><div class="md-body"><div><div class="md-section-label">ABOUT THE PROJECT</div><p class="md-description">'+d.desc+'</p><div class="md-section-label" style="margin-top:26px">KEY CONTRIBUTIONS</div><ul class="md-contrib">'+contrib+'</ul></div><div><div class="md-section-label">TECHNOLOGY</div><div class="md-tags">'+tags+'</div></div></div><div class="md-gallery"><div class="md-photo">PHOTO 01</div><div class="md-photo">PHOTO 02</div><div class="md-photo">PHOTO 03</div></div><div class="md-nav"><button id="md-prev">← PREVIOUS PROJECT</button><button id="md-next">NEXT PROJECT →</button></div>';document.getElementById('md-prev').onclick=function(){render(current-1)};document.getElementById('md-next').onclick=function(){render(current+1)};
   var mm=document.getElementById('md-media');
+  if(thumbOk[current]){mm.classList.add('has-poster');mm.style.backgroundImage='linear-gradient(rgba(10,12,50,.4),rgba(10,12,50,.4)),url('+thumbs[current]+')';}
   if(videos[current]){
    mm.style.cursor='pointer';
+   var wl=document.createElement('a');
+   wl.href='https://drive.google.com/file/d/'+videos[current]+'/view';
+   wl.target='_blank';wl.rel='noopener noreferrer';
+   wl.textContent='WATCH ON DRIVE ↗';
+   wl.style.cssText='display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.14em;font-weight:800;color:var(--md-c);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:4px';
+   mm.parentNode.insertBefore(wl,mm.nextSibling);
    mm.onclick=function(){
     mm.onclick=null;
     mm.innerHTML='<iframe src="https://drive.google.com/file/d/'+videos[current]+'/preview" allow="autoplay; fullscreen" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3;border-radius:24px"></iframe>';
