@@ -46,7 +46,7 @@ svg .rng[stroke-width]{}
 #dash{position:absolute;left:0;right:0;bottom:calc(3vh + 4vh - 2px);height:4px;background:repeating-linear-gradient(90deg,var(--sun) 0 50px,transparent 50px 100px)}
 #veh{position:absolute;inset:0}
 #rover,#rocket{position:absolute;left:50%;transform:translateX(-50%)}
-#rover{transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+#rover{transition:transform .4s cubic-bezier(.3,.7,.2,1)}
 #rover.back{transform:translateX(-50%) scaleX(-1)}
 #rover{bottom:calc(6vh - 8px);width:min(250px,56vw)}
 #rover:before{content:"";position:absolute;left:10%;right:10%;bottom:2px;height:12px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(8,10,40,.55),transparent 70%)}
@@ -414,6 +414,14 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
 #rover,#rocket{will-change:transform}
 .tier-mobile .pfeat,.riding .pfeat{animation-play-state:paused}
 .tier-mobile .pfeat{animation:none}
+
+@supports (height:100lvh){#stage{bottom:auto;height:100lvh}}
+
+/* Stable background: sun, clouds and road dashes move by transform only */
+#sun{top:0;will-change:transform}
+.cl{will-change:transform}
+#dash{left:-100px;right:-100px;will-change:transform}
+#stage{transform:translateZ(0)}
 </style>
 </head>
 <body>
@@ -565,7 +573,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
  function rnd(s){return function(){s=(s*16807)%2147483647;return s/2147483647}}
  function cl(v,a,b){return Math.min(b,Math.max(a,v))}
- var W=4200,lastY=scrollY,lastW=0;
+ var W=4200,lastY=scrollY,lastW=0,curBack=false;
  // Device tier: picks a lighter or fuller visual profile per device.
  // Test any profile by adding ?perf=low, ?perf=mobile or ?perf=desktop to the URL.
  var PQ=(location.search.match(/[?&]perf=(low|mobile|desktop)/)||[])[1],NV=navigator,
@@ -576,11 +584,18 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   TIER=PQ||((SAVE||MEM<=2||CORES<=2)?'low':((COARSE||SMALL)?'mobile':'desktop')),
   TIERS={
    desktop:{stars:130,shoot:true,win:true,W:4200,speed:110,birds:true,smooth:70},
-   mobile:{stars:60,shoot:false,win:true,W:2600,speed:100,birds:true,smooth:90},
+   mobile:{stars:60,shoot:false,win:true,W:2600,speed:100,birds:false,smooth:90},
    low:{stars:35,shoot:false,win:false,W:2000,speed:90,birds:false,smooth:110}
   },T=TIERS[TIER];
  W=T.W;
  document.documentElement.classList.add('tier-'+TIER);
+ // Stable viewport height: mobile browsers resize innerHeight whenever the address bar
+ // slides in/out while scrolling, which made the scene jump. Use the large viewport instead.
+ var probe=document.createElement('div');
+ probe.style.cssText='position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none';
+ document.body.appendChild(probe);
+ var VW=innerWidth,VH=probe.offsetHeight||window.innerHeight;
+ addEventListener('resize',function(){if(innerWidth!==VW){VW=innerWidth;VH=probe.offsetHeight||window.innerHeight;requestRender()}});
 
  // Adaptive rendering: follow the display's native refresh cadence and
  // automatically reduce decorative work when the browser is under load.
@@ -673,26 +688,26 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  calcTops();addEventListener('load',function(){calcTops();setTimeout(calcTops,1200)});var tW=innerWidth;addEventListener('resize',function(){if(innerWidth!==tW){tW=innerWidth;calcTops()}});
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(calcTops);
  function upd(){
-  var max=document.documentElement.scrollHeight-innerHeight,p=max>0?cl(sy/max,0,1):0;
-  var d=p/.6,q=cl(d,0,1),lp=cl((p-.6)/.12,0,1),vh=innerHeight/100,tr=W-innerWidth-20;
+  var max=document.documentElement.scrollHeight-VH,p=max>0?cl(sy/max,0,1):0;
+  var d=p/.6,q=cl(d,0,1),lp=cl((p-.6)/.12,0,1),vh=VH/100,tr=W-innerWidth-20;
   S($('sky'),'background',sky(p));
-  var dy=scrollY-lastY;if(Math.abs(dy)>1){$('rover').classList.toggle('back',dy<0);$('birds').classList.toggle('back',dy<0);lastY=scrollY}
+  var dy=sy-lastY;if(Math.abs(dy)>10){var bk=dy<0;if(bk!==curBack){curBack=bk;$('rover').classList.toggle('back',bk);$('birds').classList.toggle('back',bk)}lastY=sy}
   var bo=cl((p-.13)/.07,0,1)*(1-cl((p-.5)/.08,0,1));S($('birds'),'opacity',bo);S($('birds'),'display',bo>0?'':'none');
-  if(bo>0)FL.forEach(function(F){var x=-260+((p-F.s)/F.l)*(innerWidth+520),y=F.y*innerHeight+Math.sin(p*38+F.ph)*12;F.el.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+') scale('+F.sc+')')});
+  if(bo>0)FL.forEach(function(F){var x=-260+((p-F.s)/F.l)*(innerWidth+520),y=F.y*VH+Math.sin(p*38+F.ph)*12;F.el.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+') scale('+F.sc+')')});
   var dark=cl((p-.4)/.3,0,1);
   S($('world'),'transform','translate3d(0,'+Math.round(cl((p-.62)/.12,0,1)*120*vh)+'px,0)');
-  S($('world'),'filter','brightness('+(1-dark*.6).toFixed(2)+')');
+  S($('world'),'filter','brightness('+(Math.round((1-dark*.6)*20)/20)+')');
   S($('l1'),'transform','translate3d('+Math.round(-q*tr*.15)+'px,0,0)');
   S($('l2'),'transform','translate3d('+Math.round(-q*tr*.4)+'px,0,0)');
   S($('l3'),'transform','translate3d('+Math.round(-q*tr*.9)+'px,0,0)');
-  S($('dash'),'backgroundPosition',(-(sy*1.8)%100).toFixed(1)+'px 0');
+  S($('dash'),'translate',Math.round(-((sy*1.8)%100))+'px 0');
     var wr=(sy*.6).toFixed(1)+'deg';for(var wi=0;wi<whs.length;wi++)whs[wi].style.setProperty('--r',wr);
-  $('sun').style.top=(12+Math.pow(Math.abs(p-.12)*2.2,1.3)*65)+'vh';
+  S($('sun'),'translate','0 '+Math.round((12+Math.pow(Math.abs(p-.12)*2.2,1.3)*65)*VH/100)+'px');
   S($('sun'),'opacity',String(1-cl((p-.35)/.15,0,1)));S($('sun'),'display',p>.5?'none':'');
-  clouds.forEach(function(c,k){c.style.marginLeft=(-p*200*(k+1)*.5)+'px';c.style.opacity=.85*(1-cl((p-.45)/.15,0,1))});
+  clouds.forEach(function(c,k){S(c,'translate',Math.round(-p*200*(k+1)*.5)+'px 0');S(c,'opacity',String(.85*(1-cl((p-.45)/.15,0,1))))});
   var sv=cl((p-.5)/.25,0,1);
   st.style.opacity=sv;document.body.classList.toggle('space',sv>.6);st.style.transform='translateY('+(cl((p-.7)/.3,0,1)*38*vh)+'px)';
-  var iW=innerWidth,iH=innerHeight,S0=Math.min(iW*.34,240),land=cl((p-.84)/.16,0,1),L=land*land*(3-2*land),ap=cl((p-.66)/.2,0,1),A=ap*ap*(3-2*ap);
+  var iW=innerWidth,iH=VH,S0=Math.min(iW*.34,240),land=cl((p-.84)/.16,0,1),L=land*land*(3-2*land),ap=cl((p-.66)/.2,0,1),A=ap*ap*(3-2*ap);
   var Rf=Math.max(iW*.55,280),fF=Rf/(S0*70/240),ys=iH*.8,cy1=-.2*iH+(.3*iH+.2*iH)*A,cx=(iW*.07+S0/2)+(iW/2-(iW*.07+S0/2))*L,cy=cy1+((ys+Rf)-cy1)*L,f=1+(fF-1)*L,pw=$('pw');
   S(pw,'visibility',sv>0?'visible':'hidden');pw.style.opacity=sv;pw.style.transform='translate3d('+(cx-S0/2)+'px,'+(cy-S0/2)+'px,0) scale('+f+')';
   pw.style.setProperty('--pa',(8*(1-L))+'px');pw.style.setProperty('--ro',1-L);
@@ -705,7 +720,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   $('veh').style.pointerEvents='none';
   var km=p<.6?Math.round(d*240)+' km driven':Math.round(cl((p-.6)/.4,0,1)*408)+' km up';
   var ot=land>.99?'landed':km;if($('odo')._t!==ot){$('odo')._t=ot;$('odo').textContent=ot}
-  var cur=secs[0];for(var si=0;si<secs.length;si++){if(secTops[si]-sy<innerHeight*.55)cur=secs[si]}
+  var cur=secs[0];for(var si=0;si<secs.length;si++){if(secTops[si]-sy<VH*.55)cur=secs[si]}
   var ct=cur.getAttribute('data-n');if($('chap')._t!==ct){$('chap')._t=ct;$('chap').textContent=ct}
  }
  addEventListener('scroll',requestRender,{passive:true});requestRender();
@@ -715,7 +730,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  function autoStep(t){
   if(!auto)return;
   var dt=Math.min(64,t-autoLast)/1000;autoLast=t;
-  var max=document.documentElement.scrollHeight-innerHeight;
+  var max=document.documentElement.scrollHeight-VH;
   autoPos=Math.min(max,autoPos+SPEED*dt);
   scrollTo(0,autoPos);
   if(autoPos>=max-1){auto=false;document.documentElement.classList.remove('riding');return}
@@ -748,7 +763,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
  }
  function tlProg(){
   if(!tlLen)return;
-  var Y=innerHeight*.62-(tlTopAbs-scrollY);
+  var Y=VH*.62-(tlTopAbs-scrollY);
   var pr=reduce?1:cl((Y-tlY0)/(tlY1-tlY0),0,1);
   tlP.style.strokeDashoffset=tlLen*(1-pr);
   tlDots.forEach(function(e,i){e.classList.toggle('on',reduce||tlPts[i][1]<=Y+12)});
