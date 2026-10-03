@@ -719,7 +719,7 @@ p{margin:0 0 12px;line-height:1.55;color:var(--muted);font-size:clamp(15px,1.5vw
   function f(t){if(!t0)t0=t;var k=reduce?1:cl((t-t0)/1300,0,1);k=1-Math.pow(1-k,3);el.textContent=pre+Math.round(to*k)+suf;if(k<1)requestAnimationFrame(f)}
   requestAnimationFrame(f);
  }
- var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count);io.unobserve(e.target)}})},{threshold:.12});
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count);io.unobserve(e.target)}})},{threshold:0,rootMargin:'0px 0px -6% 0px'});
  document.querySelectorAll('.rv').forEach(function(e){io.observe(e)});
  var tlBox=$('tl2'),tlP=$('tp'),tlB=$('tb'),tlS=$('tlsvg'),tlDots=[].slice.call(tlBox.querySelectorAll('.dot')),tlPts=[],tlLen=0,tlY0=0,tlY1=1;
  function drawTL(){
